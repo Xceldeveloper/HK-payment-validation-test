@@ -20,12 +20,8 @@ const PaymentValidation = () => {
         errorMessage: "Invalid Card Number",
       },
       cardName: {
-        regex: /^[a-zA-Z\s]+$/,
         test: () => {
-          return (
-            /^[a-zA-Z\s]+$/.test(form.cardName) &&
-            form.cardName.trim().length > 0
-          );
+          return /^[a-zA-Z\s]+$/.test(form.cardName);
         },
         errorTarget: "nameInput",
         errorMessage: "Invalid Card Name",
@@ -80,7 +76,7 @@ const PaymentValidation = () => {
 
       if (!errorElement) return;
       if (!validation.test()) {
-        errorElement.textContent = validation.errorMessage;
+        errorElement.innerHTML = validation.errorMessage;
       }
     });
   }, [validations]);
