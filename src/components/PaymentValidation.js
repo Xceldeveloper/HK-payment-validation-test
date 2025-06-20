@@ -121,6 +121,7 @@ const PaymentValidation = () => {
                 <input
                   placeholder="Card Number"
                   data-testid="cardNumberInput"
+                  type="text"
                   value={form.cardNumber}
                   onChange={(e) => {
                     setForm({
@@ -137,6 +138,7 @@ const PaymentValidation = () => {
                 <input
                   placeholder="Name On Card"
                   data-testid="nameInput"
+                  type="text"
                   value={form.cardName}
                   onChange={(e) => {
                     setForm({
@@ -154,6 +156,8 @@ const PaymentValidation = () => {
                   <input
                     placeholder="Expiry Month"
                     data-testid="monthInput"
+                    type="number"
+                    maxLength="2"
                     value={form.cardExpiryMonth}
                     onChange={(e) => {
                       setForm({
@@ -170,6 +174,8 @@ const PaymentValidation = () => {
                   <input
                     placeholder="Expiry Year"
                     data-testid="yearInput"
+                    type="number"
+                    maxLength="4"
                     value={form.cardExpiryYear}
                     onChange={(e) => {
                       setForm({
