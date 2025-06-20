@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import "./App.css";
 import "h8k-components";
 import PaymentValidation from "./components/PaymentValidation";
