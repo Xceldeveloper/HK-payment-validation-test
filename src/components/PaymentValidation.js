@@ -67,8 +67,9 @@ const PaymentValidation = () => {
   // effect validation errors
   React.useEffect(() => {
     const errorElements = document.querySelectorAll(".invalid-text");
+
     errorElements.forEach((el) => {
-      el.style.display = "none";
+      el.innerHTML = "";
     });
 
     Object.keys(validations).forEach((key) => {
@@ -76,9 +77,10 @@ const PaymentValidation = () => {
       const errorElement = document.querySelector(
         `[data-testid="${validation.errorTarget}Error"]`
       );
+
       if (!errorElement) return;
       if (!validation.test()) {
-        errorElement.style.display = "block";
+        errorElement.textContent = validation.errorMessage;
       }
     });
   }, [validations]);
@@ -121,7 +123,7 @@ const PaymentValidation = () => {
                 <input
                   placeholder="Card Number"
                   data-testid="cardNumberInput"
-                  type="text"
+                  type="number"
                   value={form.cardNumber}
                   onChange={(e) => {
                     setForm({
@@ -130,9 +132,7 @@ const PaymentValidation = () => {
                     });
                   }}
                 />
-                <p className="invalid-text" data-testid="numberInputError">
-                  Invalid Card Number
-                </p>
+                <p className="invalid-text" data-testid="numberInputError"></p>
               </div>
               <div className="layout-column mb-15">
                 <input
@@ -147,9 +147,7 @@ const PaymentValidation = () => {
                     });
                   }}
                 />
-                <p className="invalid-text" data-testid="nameInputError">
-                  Invalid Card Name
-                </p>
+                <p className="invalid-text" data-testid="nameInputError"></p>
               </div>
               <div className="flex justify-content-around align-items-center">
                 <div className="layout-column mb-30">
@@ -166,9 +164,7 @@ const PaymentValidation = () => {
                       });
                     }}
                   />
-                  <p className="invalid-text" data-testid="monthInputError">
-                    Invalid Month
-                  </p>
+                  <p className="invalid-text" data-testid="monthInputError"></p>
                 </div>
                 <div className="layout-column mb-30">
                   <input
@@ -184,9 +180,7 @@ const PaymentValidation = () => {
                       });
                     }}
                   />
-                  <p className="invalid-text" data-testid="yearInputError">
-                    Invalid Year
-                  </p>
+                  <p className="invalid-text" data-testid="yearInputError"></p>
                 </div>
                 <div className="layout-column mb-30">
                   <input
@@ -202,9 +196,7 @@ const PaymentValidation = () => {
                       });
                     }}
                   />
-                  <p className="invalid-text" data-testid="cvvInputError">
-                    Invalid CVV
-                  </p>
+                  <p className="invalid-text" data-testid="cvvInputError"></p>
                 </div>
               </div>
               <div className="layout-column mb-30">
