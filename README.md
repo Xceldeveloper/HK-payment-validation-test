@@ -8,6 +8,8 @@
 
 ## Application Demo:
 
+https://ov-hk-payment-valid.netlify.app/
+
 ![](https://hrcdn.net/s3_pub/istreet-assets/Jf80TEVtYurbOdUpzvCjHg/43C43A02-B4D2-4AD6-832E-749C5547937C_2_0_a.gif)
 
 ## Functionality Requirements
