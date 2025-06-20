@@ -123,7 +123,7 @@ const PaymentValidation = () => {
                 <input
                   placeholder="Card Number"
                   data-testid="cardNumberInput"
-                  type="number"
+                  type="text"
                   value={form.cardNumber}
                   onChange={(e) => {
                     setForm({
