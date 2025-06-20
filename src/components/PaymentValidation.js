@@ -13,77 +13,61 @@ const PaymentValidation = () => {
   const validations = useMemo(() => {
     return {
       cardNumber: {
-        test: () => {
-          return /^\d{16}$/.test(form.cardNumber);
-        },
+        error: !/^\d{16}$/.test(form.cardNumber),
         errorTarget: "numberInput",
         errorMessage: "Invalid Card Number",
       },
       cardName: {
-        test: () => {
-          return /^[a-zA-Z\s]+$/.test(form.cardName);
-        },
+        error: !/^[a-zA-Z\s]+$/.test(form.cardName),
         errorTarget: "nameInput",
         errorMessage: "Invalid Card Name",
       },
       cardExpiryMonth: {
-        test: () => {
-          return (
-            /^(0[1-9]|1[0-2])$/.test(form.cardExpiryMonth) &&
-            form.cardExpiryMonth.length === 2
-          );
-        },
+        error: !/^(0[1-9]|1[0-2])$/.test(form.cardExpiryMonth),
         errorTarget: "monthInput",
         errorMessage: "Invalid Month",
       },
       cardExpiryYear: {
-        test: () => {
+        error: () => {
           const currentYear = new Date().getFullYear();
           const year = parseInt(form.cardExpiryYear, 10);
           return (
-            /^\d{4}$/.test(form.cardExpiryYear) &&
-            year >= currentYear &&
-            year <= currentYear + 3
+            !/^\d{4}$/.test(form.cardExpiryYear) ||
+            year < currentYear ||
+            year > currentYear + 3
           );
         },
+
         errorTarget: "yearInput",
         errorMessage: "Invalid Year",
       },
       cardCVV: {
-        regex: /^\d{3}$/,
-        test: () => {
-          return /^\d{3}$/.test(form.cardCVV);
-        },
+        error: !/^\d{3}$/.test(form.cardCVV),
         errorTarget: "cvvInput",
         errorMessage: "Invalid CVV",
       },
     };
   }, [form]);
 
-  // effect validation errors
-  React.useEffect(() => {
-    const errorElements = document.querySelectorAll(".invalid-text");
-
-    errorElements.forEach((el) => {
-      el.innerHTML = "";
-    });
-
-    Object.keys(validations).forEach((key) => {
-      const validation = validations[key];
-      const errorElement = document.querySelector(
-        `[data-testid="${validation.errorTarget}Error"]`
-      );
-
-      if (!errorElement) return;
-      if (!validation.test()) {
-        errorElement.innerHTML = validation.errorMessage;
-      }
-    });
-  }, [validations]);
-
   const canSubmit = useMemo(() => {
-    return Object.keys(validations).every((key) => validations[key].test());
-  }, [validations]);
+    if (
+      !form.cardNumber ||
+      !form.cardName ||
+      !form.cardExpiryMonth ||
+      !form.cardExpiryYear ||
+      !form.cardCVV
+    ) {
+      return false;
+    }
+
+    // run through validations and return true if all are valid and make sure to check type of error
+    return Object.values(validations).every((validation) => {
+      if (typeof validation.error === "function") {
+        return !validation.error();
+      }
+      return !validation.error;
+    });
+  }, [form, validations]);
 
   return (
     <div className="mt-30 layout-column justify-content-center align-items-center">
@@ -128,7 +112,11 @@ const PaymentValidation = () => {
                     });
                   }}
                 />
-                <p className="invalid-text" data-testid="numberInputError"></p>
+                {validations.cardNumber.error && (
+                  <p className="invalid-text" data-testid="numberInputError">
+                    {validations.cardNumber.errorMessage}
+                  </p>
+                )}
               </div>
               <div className="layout-column mb-15">
                 <input
@@ -143,7 +131,11 @@ const PaymentValidation = () => {
                     });
                   }}
                 />
-                <p className="invalid-text" data-testid="nameInputError"></p>
+                {validations.cardName.error && (
+                  <p className="invalid-text" data-testid="nameInputError">
+                    {validations.cardName.errorMessage}
+                  </p>
+                )}
               </div>
               <div className="flex justify-content-around align-items-center">
                 <div className="layout-column mb-30">
@@ -160,7 +152,11 @@ const PaymentValidation = () => {
                       });
                     }}
                   />
-                  <p className="invalid-text" data-testid="monthInputError"></p>
+                  {validations.cardExpiryMonth.error && (
+                    <p className="invalid-text" data-testid="monthInputError">
+                      {validations.cardExpiryMonth.errorMessage}
+                    </p>
+                  )}
                 </div>
                 <div className="layout-column mb-30">
                   <input
@@ -176,7 +172,11 @@ const PaymentValidation = () => {
                       });
                     }}
                   />
-                  <p className="invalid-text" data-testid="yearInputError"></p>
+                  {validations.cardExpiryYear.error() && (
+                    <p className="invalid-text" data-testid="yearInputError">
+                      {validations.cardExpiryYear.errorMessage}
+                    </p>
+                  )}
                 </div>
                 <div className="layout-column mb-30">
                   <input
@@ -192,7 +192,11 @@ const PaymentValidation = () => {
                       });
                     }}
                   />
-                  <p className="invalid-text" data-testid="cvvInputError"></p>
+                  {validations.cardCVV.error && (
+                    <p className="invalid-text" data-testid="cvvInputError">
+                      {validations.cardCVV.errorMessage}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="layout-column mb-30">
